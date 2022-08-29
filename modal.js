@@ -2,12 +2,12 @@ function inicio() {
     if (localStorage.score) {
         vencedores();
     }
-    // if (localStorage.listaNomeTotal) {
-    //     listaNome = JSON.parse(localStorage.getItem('listaNomeTotal'));
-    // }
-    // if (localStorage.listaScoreTotal) {
-    //     listaScore = JSON.parse(localStorage.getItem('listaScoreTotal'));
-    // }
+    if (localStorage.listaNomeTotal) {
+        listaNome = JSON.parse(localStorage.getItem('listaNomeTotal'));
+    }
+    if (localStorage.listaScoreTotal) {
+        listaScore = JSON.parse(localStorage.getItem('listaScoreTotal'));
+    }
     adicionarNaLista();
 }
 

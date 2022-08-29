@@ -1,7 +1,7 @@
 kaboom({
     global: true,
     fullscreen: true,
-    scale: 1.6,
+    scale: 2,
     debug: true,
     clearColor: [0, 0, 0, 1],
 })
@@ -98,7 +98,7 @@ scene("game", ({ level, score, fim }) => {
         height: 20,
         '=': [sprite('box'), solid()],
         '$': [sprite('coin'), 'coin'],
-        '}': [sprite('unboxed'), solid()],
+        // '}': [sprite('unboxed'), solid()],
         '@': [sprite('marmor'), solid()],
         '!': [sprite('brick'), solid()],
         '&': [sprite('slime'), 'dangerous'],
@@ -129,22 +129,28 @@ scene("game", ({ level, score, fim }) => {
     add([text('level ' + parseInt(level + 1)), pos(40, 6)])
 
 
-    // let fim = 30;
+    // let foi = false;
     function repeat() {
-        if (fim < 0) return
+        console.log("Ta no repeat")
+        if (fim > 0) return
         var meuInterval = setInterval(() => {
+            console.log("Entrou")
             fim--;
             time.value--;
             time.text = time.value
             if (fim <= 0) {
-                localStorage.setItem("score", scoreLabel.value);
-                window.location.href = "modal.html"
+                console.log("Foi")
                 clearInterval(meuInterval);
+                // localStorage.setItem("score", scoreLabel.value);
+                // window.location.href = "modal.html"
+                
             }
         }, 1000);
 
     };
-
+    if(level > 1){
+        repeat();
+    }
 
 
     const time = add([
@@ -270,20 +276,22 @@ scene("game", ({ level, score, fim }) => {
     })
 
     player.collides('dangerous', (obj) => {
-        go("game", { level: 0, score: 0 });
+        // go("game", { level: 0, score: 0 , fim: 0});
     })
 
     player.collides('bomb', (obj) => {
-        go("game", { level: 0, score: 0 });
+        // go("game", { level: 0, score: 0, fim: 0 });
     })
 
     player.collides('next', (obj) => {
-        repeat();
+        
         go('game', {
             level: (level + 1) % maps.length,
             score: scoreLabel.value,
             fim: 30
         })
+        repeat();
+        // foi = true;
 
     })
 
@@ -325,4 +333,4 @@ scene("game", ({ level, score, fim }) => {
     })
 })
 
-start("game", { level: 0, score: 0, fim: 0 })
+start("game", { level: 0, score: 0, fim: 30 })
