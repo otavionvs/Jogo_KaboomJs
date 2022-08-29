@@ -18,14 +18,6 @@ loadRoot('https://i.imgur.com/')
 loadSprite('coin', 'wbKxhcd.png')
 loadSprite('brick', 'pogC9x5.png')
 loadSprite('block', 'M6rwarW.png')
-loadSprite('mario', 'Wb1qfhK.png')
-loadSprite('mushroom', '0wMd92p.png')
-loadSprite('surprise', 'gesQ1KP.png')
-loadSprite('unboxed', 'bdrLpi6.png')
-loadSprite('pipe-top-left', 'ReTPiWY.png')
-loadSprite('pipe-top-right', 'hj2GK4n.png')
-loadSprite('pipe-bottom-left', 'c1cYSbt.png')
-loadSprite('pipe-bottom-right', 'nqQ79eI.png')
 loadSprite('marmor', 'EkleLlt.png')
 loadSprite('down-marmor', 'Ou9w4gH.png')
 loadSprite('box', 'bdrLpi6.png')
@@ -46,10 +38,8 @@ loadSprite('polvo', '6YV0Zas.png', { sliceX: 3, });
 loadSprite('bomba', 'etY46bP.png', { sliceX: 3, });
 
 loadSprite('blue-block', 'fVscIbn.png')
-    // loadSprite('blue-brick', '3e5YRQd.png')
 loadSprite('blue-steel', 'gqVoI2b.png')
-    // loadSprite('blue-evil-shroom', 'SvV4ueD.png')
-    // loadSprite('blue-surprise', 'RMqCc1G.png')
+
 
 scene("game", ({ level, score, fim }) => {
     layers(['bg', 'obj', 'ui'], 'obj');
@@ -80,8 +70,8 @@ scene("game", ({ level, score, fim }) => {
         ],
         [
             'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-            '.                                     ',
-            '.    $    $     $     $    $          ',
+            '                                      ',
+            '     $    $     $     $    $          ',
             'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx    xxx',
             ' ) ;       ( ;   ;   ) ;    ;   (     ',
             '     )     ;    ;  ;      (        )  ',
@@ -108,8 +98,6 @@ scene("game", ({ level, score, fim }) => {
         height: 20,
         '=': [sprite('box'), solid()],
         '$': [sprite('coin'), 'coin'],
-        '%': [sprite('surprise'), solid(), 'coin-surprise'],
-        '*': [sprite('surprise'), solid(), 'mushroom-surprise'],
         '}': [sprite('unboxed'), solid()],
         '@': [sprite('marmor'), solid()],
         '!': [sprite('brick'), solid()],
@@ -141,7 +129,6 @@ scene("game", ({ level, score, fim }) => {
     add([text('level ' + parseInt(level + 1)), pos(40, 6)])
 
 
-
     // let fim = 30;
     function repeat() {
         if (fim < 0) return
@@ -150,13 +137,15 @@ scene("game", ({ level, score, fim }) => {
             time.value--;
             time.text = time.value
             if (fim <= 0) {
+                localStorage.setItem("score", scoreLabel.value);
+                window.location.href = "modal.html"
                 clearInterval(meuInterval);
             }
         }, 1000);
 
     };
 
-    repeat();
+
 
     const time = add([
         text(fim), pos(200, 6), layer('ui'),
@@ -165,17 +154,6 @@ scene("game", ({ level, score, fim }) => {
         }
     ])
 
-
-
-
-    // const player = add([
-    //     sprite('bomberman'), ,
-    //     pos(30, 320),
-    //     body(),
-    //     origin('bot')
-
-
-    // ])
 
     const player = add([
         sprite('bomberman', {
@@ -292,26 +270,21 @@ scene("game", ({ level, score, fim }) => {
     })
 
     player.collides('dangerous', (obj) => {
-        // go("game", { level: 0, score: 0});
+        go("game", { level: 0, score: 0 });
     })
 
     player.collides('bomb', (obj) => {
-        // go("game", { level: 0, score: 0});
+        go("game", { level: 0, score: 0 });
     })
 
     player.collides('next', (obj) => {
-        // let listaScore = [];
-        // listaScore = JSON.parse(localStorage.getItem('listaScoreTotal'));
-        // listaScore.push(scoreLabel.value);
-        // localStorage.listaScoreTotal = JSON.stringify(listaScore);
-        localStorage.setItem("score", scoreLabel.value);
-        // repeat();
-        // go('game', {
-        //   level: (level + 1) % maps.length,
-        //   score: scoreLabel.value, 
-        //   fim: 30
-        // })
-        window.location.href = "modal.html"
+        repeat();
+        go('game', {
+            level: (level + 1) % maps.length,
+            score: scoreLabel.value,
+            fim: 30
+        })
+
     })
 
     player.collides('coin', (obj) => {
@@ -328,7 +301,6 @@ scene("game", ({ level, score, fim }) => {
     })
 
     action('coinMove', (s) => {
-        // s.pushOutAll();
         s.move(0, s.dir * ENEMY_SPEED)
         s.timer -= dt()
         if (s.timer <= 0) {
@@ -338,11 +310,8 @@ scene("game", ({ level, score, fim }) => {
     })
 
     collides('coinMove', 'wall', (s) => {
-            s.dir = -s.dir;
-        })
-        // player.collides('coinMove', (s) => {
-        //   s.dir = -s.dir;
-        // })
+        s.dir = -s.dir;
+    })
 
     player.collides('brick', (obj) => {
         if (isJumping) {
@@ -356,4 +325,4 @@ scene("game", ({ level, score, fim }) => {
     })
 })
 
-start("game", { level: 0, score: 0, fim: 1 })
+start("game", { level: 0, score: 0, fim: 0 })
