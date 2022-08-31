@@ -132,25 +132,31 @@ scene("game", ({ level, score, fim }) => {
     // let foi = false;
     function repeat() {
         console.log("Ta no repeat")
-        if (fim > 0) return
+        if (fim < 0) return
         var meuInterval = setInterval(() => {
             console.log("Entrou")
             fim--;
+            // if(level > 1){
             time.value--;
             time.text = time.value
+            // }
             if (fim <= 0) {
-                console.log("Foi")
+                // console.log("Foi")
+
                 clearInterval(meuInterval);
-                // localStorage.setItem("score", scoreLabel.value);
-                // window.location.href = "modal.html"
-                
+                if (level > 0) {
+                    localStorage.setItem("score", scoreLabel.value);
+                    window.location.href = "modal.html"
+                }
+
+
             }
         }, 1000);
 
     };
-    if(level > 1){
-        repeat();
-    }
+
+    repeat();
+
 
 
     const time = add([
@@ -276,15 +282,15 @@ scene("game", ({ level, score, fim }) => {
     })
 
     player.collides('dangerous', (obj) => {
-        // go("game", { level: 0, score: 0 , fim: 0});
+        go("game", { level: 0, score: 0 , fim: 0});
     })
 
     player.collides('bomb', (obj) => {
-        // go("game", { level: 0, score: 0, fim: 0 });
+        go("game", { level: 0, score: 0, fim: 0 });
     })
 
     player.collides('next', (obj) => {
-        
+
         go('game', {
             level: (level + 1) % maps.length,
             score: scoreLabel.value,
@@ -298,13 +304,13 @@ scene("game", ({ level, score, fim }) => {
     player.collides('coin', (obj) => {
         destroy(obj)
         scoreLabel.value++
-            scoreLabel.text = scoreLabel.value
+        scoreLabel.text = scoreLabel.value
 
     })
     player.collides('coinMove', (obj) => {
         destroy(obj)
         scoreLabel.value++
-            scoreLabel.text = scoreLabel.value
+        scoreLabel.text = scoreLabel.value
 
     })
 
@@ -333,4 +339,4 @@ scene("game", ({ level, score, fim }) => {
     })
 })
 
-start("game", { level: 0, score: 0, fim: 30 })
+start("game", { level: 0, score: 0, fim: 1 })
