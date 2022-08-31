@@ -282,11 +282,11 @@ scene("game", ({ level, score, fim }) => {
     })
 
     player.collides('dangerous', (obj) => {
-        go("game", { level: 0, score: 0 , fim: 0});
+        go("game", { level: 0, score: 0 , fim: 1});
     })
 
     player.collides('bomb', (obj) => {
-        go("game", { level: 0, score: 0, fim: 0 });
+        go("game", { level: 0, score: 0, fim: 1 });
     })
 
     player.collides('next', (obj) => {
